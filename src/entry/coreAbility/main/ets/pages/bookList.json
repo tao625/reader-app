@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "title": "活着",
+    "author": "余华",
+    "cover": "https://m.bstatic.com/x/v/images/blogebook/lo/638851567_444043764621728-4765139028409874189.jpg",
+    "category": "经典文学"
+  },
+  {
+    "id": 2,
+    "title": "三体",
+    "author": "刘慈欣",
+    "cover": "https://m.bstatic.com/x/v/images/blogebook/lo/638851567_444043764621728-4765139028409874189.jpg",
+    "category": "科幻小说"
+  },
+  {
+    "id": 3,
+    "title": "百年孤独",
+    "author": "加西亚·马尔克斯",
+    "cover": "https://m.bstatic.com/x/v/images/blogebook/lo/638851567_444043764621728-4765139028409874189.jpg",
+    "category": "魔幻现实主义"
+  },
+  {
+    "id": 4,
+    "title": "围城",
+    "author": "钱钟书",
+    "cover": "https://m.bstatic.com/x/v/images/blogebook/lo/638851567_444043764621728-4765139028409874189.jpg",
+    "category": "经典文学"
+  },
+  {
+    "id": 5,
+    "title": "红楼梦",
+    "author": "曹雪芹",
+    "cover": "https://m.bstatic.com/x/v/images/blogebook/lo/638851567_444043764621728-4765139028409874189.jpg",
+    "category": "古典文学"
+  },
+  {
+    "id": 6,
+    "title": "平凡的世界",
+    "author": "路遥",
+    "cover": "https://m.bstatic.com/x/v/images/blogebook/lo/638851567_444043764621728-4765139028409874189.jpg",
+    "category": "现实主义"
+  },
+  {
+    "id": 7,
+    "title": "追风筝的人",
+    "author": "卡勒德·胡赛尼",
+    "cover": "https://m.bstatic.com/x/v/images/blogebook/lo/638851567_444043764621728-4765139028409874189.jpg",
+    "category": "成长小说"
+  },
+  {
+    "id": 8,
+    "title": "白夜行",
+    "author": "东野圭吾",
+    "cover": "https://m.bstatic.com/x/v/images/blogebook/lo/638851567_444043764621728-4765139028409874189.jpg",
+    "category": "悬疑小说"
+  }
+]

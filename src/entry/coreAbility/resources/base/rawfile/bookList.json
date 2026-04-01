@@ -1,0 +1,68 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "title": "活着",
+      "author": "余华",
+      "cover": "https://example.com/covers/huozhe.jpg",
+      "category": "recommended",
+      "progress": 85
+    },
+    {
+      "id": 2,
+      "title": "三体",
+      "author": "刘慈欣",
+      "cover": "https://example.com/covers/sanTi.jpg",
+      "category": "recommended",
+      "progress": 0
+    },
+    {
+      "id": 3,
+      "title": "百年孤独",
+      "author": "加西亚·马尔克斯",
+      "cover": "https://example.com/covers/century.jpg",
+      "category": "recommended",
+      "progress": 60
+    },
+    {
+      "id": 4,
+      "title": "围城",
+      "author": "钱钟书",
+      "cover": "https://example.com/covers/weicheng.jpg",
+      "category": "favorite",
+      "progress": 45
+    },
+    {
+      "id": 5,
+      "title": "红楼梦",
+      "author": "曹雪芹",
+      "cover": "https://example.com/covers/honglou.jpg",
+      "category": "favorite",
+      "progress": 30
+    },
+    {
+      "id": 6,
+      "title": "平凡的世界",
+      "author": "路遥",
+      "cover": "https://example.com/covers/pingfan.jpg",
+      "category": "favorite",
+      "progress": 70
+    },
+    {
+      "id": 7,
+      "title": "追风筝的人",
+      "author": "卡勒德·胡赛尼",
+      "cover": "https://example.com/covers/kite.jpg",
+      "category": "recommended",
+      "progress": 0
+    },
+    {
+      "id": 8,
+      "title": "白夜行",
+      "author": "东野圭吾",
+      "cover": "https://example.com/covers/hakuyokou.jpg",
+      "category": "recommended",
+      "progress": 25
+    }
+  ]
+}

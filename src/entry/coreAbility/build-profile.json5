@@ -1,0 +1,18 @@
+{
+  "apiRelease": 10,
+  "compatibleSdkVersion": "5.0.0(12)",
+  "products": [
+    {
+      "name": "default",
+      "signingConfig": "",
+      "runtimeMode": "Release",
+      "csv": {
+        "sdkName": "default"
+      }
+    }
+  ],
+  "options": {
+    "scalarSize": 3072,
+    "withSubDirectory": false
+  }
+}

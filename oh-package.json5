@@ -1,0 +1,11 @@
+{
+  "name": "reader-app",
+  "version": "1.0.0",
+  "description": "鸿蒙读书 APP",
+  "main": "",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies":{},
+  "devDependencies": {},
+  "modelVersion": "6.0.0"
+}

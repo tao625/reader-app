@@ -1,0 +1,45 @@
+{
+  "app": {
+    "signingConfigs": [],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeMode": "Release",
+        "csv": {
+          "sdkName": "default"
+        }
+      }
+    ],
+    "options": {
+      "scalarSize": 3072,
+      "withSubDirectory": false
+    }
+  },
+  "modules": [
+    {
+      "name": "entry.coreAbility",
+      "srcPath": "src/entry/coreAbility",
+      "targets": [
+        {
+          "name": "default",
+          "applyFrom": [
+            "./src/entry/coreAbility/build-profile.json5"
+          ]
+        }
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "name": "default",
+      "options": {
+        "runtimeAgent": "default"
+      },
+      "modules": [
+        "entry.coreAbility"
+      ]
+    }
+  ]
+}
