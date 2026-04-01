@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="20897abd-ffd2-4cad-95dc-34975f82bac0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/reader-app.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-profile.json5" beforeDir="false" afterPath="$PROJECT_DIR$/build-profile.json5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/oh-package.json5" beforeDir="false" afterPath="$PROJECT_DIR$/oh-package.json5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/build-profile.json5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/main/ets/Application.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/main/ets/EntryAbility.ets" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/main/ets/pages/Index.ets" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/main/ets/pages/Reader.ets" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/main/ets/pages/Settings.ets" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/main/ets/pages/bookList.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/main/ets/pages/content.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/modules.json5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/oh-package.json5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/resources/base/rawfile/bookList.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry/coreAbility/resources/base/rawfile/content.json" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="3BlLdI3hjYWMohb1JTS1K8JJufv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+</project>

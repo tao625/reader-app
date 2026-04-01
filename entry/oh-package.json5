@@ -1,7 +1,7 @@
 {
-  "name": "reader-app",
+  "name": "entry",
   "version": "1.0.0",
-  "description": "鸿蒙读书 APP",
+  "description": "鸿蒙读书 APP 入口模块",
   "main": "",
   "author": "",
   "license": "Apache-2.0",

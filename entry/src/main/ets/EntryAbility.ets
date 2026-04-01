@@ -5,6 +5,7 @@ import { window } from '@kit.ArkInterface'
  * 应用入口 Ability
  * 负责应用的启动、生命周期管理
  */
+@Entry
 export default class EntryAbility extends UIAbility {
   /**
    * 窗口创建回调
