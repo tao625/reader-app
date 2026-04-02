@@ -2,6 +2,7 @@ import { router } from '@kit.ArkUI'
 import { promptAction } from '@kit.ArkUI'
 import content from '../rawfile/content.json'
 import { ReadingSettings, ReaderTheme, PREDEFINED_THEMES } from '../common/Types'
+import { StorageManager } from '../common/StorageManager'
 
 /**
  * 阅读器页面
@@ -19,6 +20,9 @@ struct Reader {
   @State private showMenu: boolean = false        // 侧边菜单显示状态
   @State private bgColor: ResourceColor = PREDEFINED_THEMES.light.bgColor  // 背景色
   @State private textColor: ResourceColor = PREDEFINED_THEMES.light.textColor // 文字色
+  @State private bookId: number = 1              // 当前书籍ID
+  @State private scrollPosition: number = 0      // 滚动位置
+  @State private isFavorite: boolean = false      // 是否收藏
 
   // --- 阅读设置 ---
   private readingSettings: ReadingSettings = {
@@ -26,6 +30,58 @@ struct Reader {
     lineHeight: 24,
     wordSpacing: 4,
     isNightMode: false
+  }
+
+  /**
+   * 页面显示时加载设置和阅读进度
+   */
+  onPageShow(): void {
+    this.loadSettings();
+  }
+
+  /**
+   * 页面隐藏时保存设置和阅读进度
+   */
+  onPageHide(): void {
+    this.saveSettings();
+  }
+
+  /**
+   * 加载设置和阅读进度
+   */
+  private async loadSettings(): Promise<void> {
+    // 加载阅读设置
+    const settings = await StorageManager.getReadingSettings();
+    this.fontSize = settings.fontSize;
+    this.lineHeight = settings.lineHeight;
+    this.isNightMode = settings.isNightMode;
+    this.bgColor = this.isNightMode ? '#1a1a1a' : '#FFFFFF';
+    this.textColor = this.isNightMode ? '#e0e0e0' : '#333333';
+
+    // 加载阅读进度
+    const progress = await StorageManager.getReadingProgress(this.bookId);
+    // 这里可以根据进度设置滚动位置
+
+    // 检查书籍是否被收藏
+    this.isFavorite = await StorageManager.isFavorite(this.bookId);
+  }
+
+  /**
+   * 保存设置和阅读进度
+   */
+  private async saveSettings(): Promise<void> {
+    // 保存阅读设置
+    const settings: ReadingSettings = {
+      fontSize: this.fontSize,
+      lineHeight: this.lineHeight,
+      wordSpacing: 4,
+      isNightMode: this.isNightMode
+    };
+    await StorageManager.saveReadingSettings(settings);
+
+    // 保存阅读进度（这里使用模拟值，实际应该根据滚动位置计算）
+    const progress = 50; // 模拟值
+    await StorageManager.saveReadingProgress(this.bookId, progress);
   }
 
   // --- 主题配置 ---
@@ -111,42 +167,68 @@ struct Reader {
         this.showMenu = !this.showMenu
       })
 
-      // 目录按钮（模拟）
-      Button({
-        type: ButtonType.Text,
-        width: '90%'
-      }) {
+      // 目录
+      Column() {
         Text('目录')
           .fontSize(14)
+          .fontColor('#FFFFFF')
+          .margin({ bottom: 8 })
+        
+        Column() {
+          ForEach(content.toc, (tocItem: { title: string, progress: number }, index: number) => {
+            Button({
+              type: ButtonType.Text,
+              width: '100%'
+            }) {
+              Text(tocItem.title)
+                .fontSize(12)
+                .fontColor('#FFFFFF')
+            }
+            .backgroundColor('#444444')
+            .padding(6)
+            .margin({ bottom: 4 })
+            .onClick(() => {
+              // 跳转到对应章节
+              this.scrollToChapter(index);
+              this.showMenu = false;
+            })
+          })
+        }
+        .width('100%')
       }
-      .backgroundColor(this.showMenu ? '#e0e0e0' : '#f5f5f5')
-      .fontColor(this.showMenu ? '#333333' : '#999999')
+      .width('90%')
       .padding(8)
       .margin({ left: 4, right: 4, top: 4, bottom: 4 })
-      .onClick(() => {
-        // TODO: 实现目录跳转
-        this.showMenu = false
-      })
 
-      // 标记为收藏按钮（模拟）
+      // 标记为收藏按钮
       Button({
         type: ButtonType.Text,
         width: '90%'
       }) {
-        Text('标记为收藏')
+        Text(this.isFavorite ? '取消收藏' : '标记为收藏')
           .fontSize(14)
       }
-      .backgroundColor(this.showMenu ? '#ff9800' : '#f44336')
-      .fontColor('#FFFFFF')
+      .backgroundColor(this.isFavorite ? '#f5f5f5' : '#ff9800')
+      .fontColor(this.isFavorite ? '#666' : '#FFFFFF')
       .padding(8)
       .margin({ left: 4, right: 4, top: 4, bottom: 4 })
-      .onClick(() => {
-        // TODO: 实现收藏功能
-        this.showMenu = false
-        promptAction.showToast({
-          message: '已添加到书架',
-          duration: 2000
-        })
+      .onClick(async () => {
+        if (this.isFavorite) {
+          await StorageManager.removeFromFavorites(this.bookId);
+          this.isFavorite = false;
+          promptAction.showToast({
+            message: '已从收藏中移除',
+            duration: 2000
+          });
+        } else {
+          await StorageManager.addToFavorites(this.bookId);
+          this.isFavorite = true;
+          promptAction.showToast({
+            message: '已添加到收藏',
+            duration: 2000
+          });
+        }
+        this.showMenu = false;
       })
 
       Divider()
@@ -217,7 +299,7 @@ struct Reader {
           .padding({ top: 10, bottom: 10, left: 16, right: 16 })
 
         // 正文内容
-        Scroll() {
+        Scroll(this.scrollPosition) {
           Column() {
             ForEach(content.content, (text: string, index: number) => {
               Text(text)
@@ -228,11 +310,15 @@ struct Reader {
                 .margin({ bottom: 10 })
                 .width('100%')
                 .padding({ left: 16, right: 16 })
+                .id(`content-${index}`)
             })
           }
           .width('100%')
         }
         .layoutWeight(1)
+        .onScroll((offset: number) => {
+          this.scrollPosition = offset;
+        })
       }
       .width('100%')
       .height('100%')
@@ -270,5 +356,15 @@ struct Reader {
     return content.toc.map((toc: { title: string, progress: number }) => {
       return `- ${toc.title} (第${toc.progress}页)`
     }).join('\n')
+  }
+
+  /**
+   * 跳转到指定章节
+   * @param chapterIndex 章节索引
+   */
+  private scrollToChapter(chapterIndex: number): void {
+    // 计算滚动位置（这里使用简单的线性计算，实际应用中可能需要更复杂的计算）
+    const chapterHeight = 100; // 假设每个章节的高度
+    this.scrollPosition = chapterIndex * chapterHeight;
   }
 }

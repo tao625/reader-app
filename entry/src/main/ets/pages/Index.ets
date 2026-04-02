@@ -1,6 +1,7 @@
 import bookList from '../../rawfile/bookList.json'
-import { router } from '@kit.ArkUI'
+import { router, promptAction } from '@kit.ArkUI'
 import { BookInfo } from '../common/Types'
+import { StorageManager } from '../common/StorageManager'
 
 // 页面状态
 @Entry
@@ -12,8 +13,41 @@ struct Index {
   // 筛选状态：显示收藏书籍
   @State private showFavorites: boolean = false
 
+  // 收藏书籍ID列表
+  @State private favoriteBookIds: number[] = []
+
   // 书籍列表数据
   private bookListData: BookInfo[] = bookList.books
+
+  /**
+   * 页面显示时加载收藏列表
+   */
+  onPageShow(): void {
+    this.loadFavorites();
+  }
+
+  /**
+   * 加载收藏列表
+   */
+  private async loadFavorites(): Promise<void> {
+    this.favoriteBookIds = await StorageManager.getFavoriteBooks();
+  }
+
+  /**
+   * 切换收藏状态
+   * @param bookId 书籍ID
+   */
+  private async toggleFavorite(bookId: number): Promise<void> {
+    if (this.favoriteBookIds.includes(bookId)) {
+      await StorageManager.removeFromFavorites(bookId);
+      this.favoriteBookIds = this.favoriteBookIds.filter(id => id !== bookId);
+      promptAction.showToast({ message: '已从收藏中移除' });
+    } else {
+      await StorageManager.addToFavorites(bookId);
+      this.favoriteBookIds.push(bookId);
+      promptAction.showToast({ message: '已添加到收藏' });
+    }
+  }
 
   // 构建页面布局
   build() {
@@ -82,28 +116,30 @@ struct Index {
       .justifyContent(FlexAlign.SpaceBetween)
 
       // --- 书籍列表 ---
-      Scroll() {
-        Column() {
-          // 搜索后过滤书籍列表
-          let filteredBooks = this.searchQuery.length > 0
-            ? this.bookListData.filter(book =>
-                book.title.includes(this.searchQuery) ||
-                book.author.includes(this.searchQuery)
-              )
-            : this.bookListData
+      List() {
+        // 搜索后过滤书籍列表
+        let filteredBooks = this.searchQuery.length > 0
+          ? this.bookListData.filter(book =>
+              book.title.includes(this.searchQuery) ||
+              book.author.includes(this.searchQuery)
+            )
+          : this.bookListData
 
-          // 根据筛选条件显示书籍
-          ForEach(filteredBooks, (book: BookInfo) => {
-            // 如果显示收藏，只显示收藏的书籍
-            if (!this.showFavorites || book.category === 'favorite') {
-              BookCard({ book })
+        // 根据筛选条件显示书籍
+        ForEach(filteredBooks, (book: BookInfo) => {
+          // 如果显示收藏，只显示收藏的书籍
+          if (!this.showFavorites || this.favoriteBookIds.includes(book.id)) {
+            ListItem() {
+              BookCard({ book, isFavorite: this.favoriteBookIds.includes(book.id), onToggleFavorite: () => this.toggleFavorite(book.id) })
             }
-          }, (book: BookInfo) => book.id.toString())
-        }
-        .width('100%')
+            .key(book.id.toString())
+          }
+        }, (book: BookInfo) => book.id.toString())
       }
       .layoutWeight(1)
       .width('100%')
+      .edgeEffect(EdgeEffect.None)
+      .divider({ strokeWidth: 0 })
     }
     .width('100%')
     .height('100%')
@@ -114,10 +150,14 @@ struct Index {
 /**
  * 书本卡片组件
  * @param book 书籍信息对象
+ * @param isFavorite 是否收藏
+ * @param onToggleFavorite 切换收藏状态的回调
  */
 @Component
 struct BookCard {
   @Prop book: BookInfo
+  @Prop isFavorite: boolean
+  @Prop onToggleFavorite: () => void
 
   build() {
     Row() {
@@ -134,21 +174,35 @@ struct BookCard {
 
       // 书籍信息
       Column() {
-        Text(book.title)
-          .fontSize(16)
-          .fontWeight(FontWeight.Medium)
-          .fontColor('#333')
-          .maxLines(2)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
+        Row() {
+          Text(book.title)
+            .fontSize(16)
+            .fontWeight(FontWeight.Medium)
+            .fontColor('#333')
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .layoutWeight(1)
+          Button(this.isFavorite ? '取消收藏' : '收藏')
+            .fontSize(12)
+            .padding({ left: 8, right: 8, top: 2, bottom: 2 })
+            .backgroundColor(this.isFavorite ? '#f5f5f5' : '#ff9800')
+            .fontColor(this.isFavorite ? '#666' : '#FFFFFF')
+            .onClick(() => {
+              this.onToggleFavorite();
+            })
+        }
+        .width('100%')
+        .margin({ bottom: 4 })
+
         Text(book.author)
           .fontSize(14)
           .fontColor('#666')
           .margin({ top: 4 })
-        Text(book.category === 'favorite' ? '已收藏' : '推荐')
+        Text(this.isFavorite ? '已收藏' : '推荐')
           .fontSize(12)
           .fontColor('#FFFFFF')
           .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-          .backgroundColor(book.category === 'favorite' ? '#ff9800' : '#2196F3')
+          .backgroundColor(this.isFavorite ? '#ff9800' : '#2196F3')
           .borderRadius(4)
           .margin({ top: 8 })
 

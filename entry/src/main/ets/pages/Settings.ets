@@ -1,5 +1,7 @@
 import { router, promptAction } from '@kit.ArkUI'
 import { AppSettings, DEFAULT_APP_SETTINGS, PREDEFINED_THEMES } from '../common/Types'
+import { StorageManager } from '../common/StorageManager'
+import { SliderSetting } from '../components/SliderSetting'
 
 /**
  * 设置页面
@@ -15,6 +17,46 @@ struct Settings {
   @State private nightMode: boolean = DEFAULT_APP_SETTINGS.nightMode           // 夜间模式开关
   @State private soundEnabled: boolean = DEFAULT_APP_SETTINGS.soundEnabled     // 音效开关
   @State private autoSleepMinutes: number = DEFAULT_APP_SETTINGS.autoSleepMinutes // 自动休眠时间（分钟）
+
+  /**
+   * 页面显示时加载设置
+   */
+  onPageShow(): void {
+    this.loadSettings();
+  }
+
+  /**
+   * 页面隐藏时保存设置
+   */
+  onPageHide(): void {
+    this.saveSettings();
+  }
+
+  /**
+   * 加载设置
+   */
+  private async loadSettings(): Promise<void> {
+    const settings = await StorageManager.getAppSettings();
+    this.themeMode = settings.themeMode;
+    this.defaultFontSize = settings.defaultFontSize;
+    this.nightMode = settings.nightMode;
+    this.soundEnabled = settings.soundEnabled;
+    this.autoSleepMinutes = settings.autoSleepMinutes;
+  }
+
+  /**
+   * 保存设置
+   */
+  private async saveSettings(): Promise<void> {
+    const settings: AppSettings = {
+      themeMode: this.themeMode,
+      defaultFontSize: this.defaultFontSize,
+      nightMode: this.nightMode,
+      soundEnabled: this.soundEnabled,
+      autoSleepMinutes: this.autoSleepMinutes
+    };
+    await StorageManager.saveAppSettings(settings);
+  }
 
   // --- 主题设置区域 ---
   @Builder themeSettings() {
@@ -107,8 +149,10 @@ struct Settings {
         .fontColor('#FFFFFF')
         .padding(8)
         .margin({ top: 8 })
-        .onClick(() => {
-          promptAction.showToast({ message: '缓存已清空' })
+        .onClick(async () => {
+          await StorageManager.clearAll();
+          await this.loadSettings();
+          promptAction.showToast({ message: '缓存已清空' });
         })
     }
     .width('100%')
@@ -177,112 +221,66 @@ struct Settings {
 
   // --- 字体大小组件 ---
   @Builder fontSizeBuilder() {
-    Column() {
-      Row() {
-        Text('字号')
-          .fontSize(14)
-          .fontColor('#666')
-          .layoutWeight(1)
-        Text(`${this.defaultFontSize}px`)
-          .fontSize(14)
-          .fontColor('#666')
+    SliderSetting({
+      label: '字号',
+      value: this.defaultFontSize,
+      min: 12,
+      max: 32,
+      step: 1,
+      unit: 'px',
+      textColor: '#666',
+      onValueChange: (value: number) => {
+        this.defaultFontSize = value;
       }
-      .width('100%')
-      .margin({ bottom: 8 })
-
-      Slider({
-        value: this.defaultFontSize,
-        min: 12,
-        max: 32,
-        step: 1
-      })
-        .width('100%')
-        .onChange((value: number) => {
-          this.defaultFontSize = value
-        })
-    }
-    .width('100%')
+    });
   }
 
   // --- 行距组件 ---
   @Builder lineHeightBuilder() {
-    Column() {
-      Row() {
-        Text('行距')
-          .fontSize(14)
-          .fontColor('#666')
-          .layoutWeight(1)
-        Text(`${this.defaultFontSize + 8}px`)
-          .fontSize(14)
-          .fontColor('#666')
+    SliderSetting({
+      label: '行距',
+      value: this.defaultFontSize + 8,
+      min: 16,
+      max: 48,
+      step: 2,
+      unit: 'px',
+      textColor: '#666',
+      onValueChange: (value: number) => {
+        // 这里可以根据需要更新相关状态
       }
-      .width('100%')
-      .margin({ bottom: 8 })
-
-      Slider({
-        value: this.defaultFontSize + 8,
-        min: 16,
-        max: 48,
-        step: 2
-      })
-        .width('100%')
-    }
-    .width('100%')
+    });
   }
 
   // --- 字间距组件 ---
   @Builder wordSpacingBuilder() {
-    Column() {
-      Row() {
-        Text('字间距')
-          .fontSize(14)
-          .fontColor('#666')
-          .layoutWeight(1)
-        Text('4px')
-          .fontSize(14)
-          .fontColor('#666')
+    SliderSetting({
+      label: '字间距',
+      value: 4,
+      min: 2,
+      max: 10,
+      step: 1,
+      unit: 'px',
+      textColor: '#666',
+      onValueChange: (value: number) => {
+        // 这里可以根据需要更新相关状态
       }
-      .width('100%')
-      .margin({ bottom: 8 })
-
-      Slider({
-        value: 4,
-        min: 2,
-        max: 10,
-        step: 1
-      })
-        .width('100%')
-    }
-    .width('100%')
+    });
   }
 
   // --- 自动休眠组件 ---
   @Builder autoSleepBuilder() {
-    Column() {
-      Row() {
-        Text('自动休眠')
-          .fontSize(14)
-          .fontColor('#666')
-          .layoutWeight(1)
-        Text(`${this.autoSleepMinutes}分钟`)
-          .fontSize(14)
-          .fontColor('#666')
+    SliderSetting({
+      label: '自动休眠',
+      value: this.autoSleepMinutes,
+      min: 5,
+      max: 120,
+      step: 5,
+      unit: '分钟',
+      textColor: '#666',
+      onValueChange: (value: number) => {
+        this.autoSleepMinutes = value;
       }
-      .width('100%')
-      .margin({ bottom: 8 })
-
-      Slider({
-        value: this.autoSleepMinutes,
-        min: 5,
-        max: 120,
-        step: 5
-      })
-        .width('100%')
-        .onChange((value: number) => {
-          this.autoSleepMinutes = value
-        })
-    }
-    .width('100%')
+    });
   }
 
   build() {
