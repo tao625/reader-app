@@ -1,9 +1,12 @@
-import router from '@ohos.router'
+import { router } from '@kit.ArkUI'
+import { promptAction } from '@kit.ArkUI'
 import content from '../rawfile/content.json'
+import { ReadingSettings, ReaderTheme, PREDEFINED_THEMES } from '../common/Types'
 
 /**
  * 阅读器页面
  * 负责书籍内容的阅读展示
+ * API 20 版本
  */
 @Entry
 @Component
@@ -14,8 +17,16 @@ struct Reader {
   @State private isNightMode: boolean = false    // 夜间模式
   @State private currentTitle: string = '活着'    // 当前书籍标题
   @State private showMenu: boolean = false        // 侧边菜单显示状态
-  @State private bgColor: ResourceColor = '#FFFFFF'  // 背景色
-  @State private textColor: ResourceColor = '#333333' // 文字色
+  @State private bgColor: ResourceColor = PREDEFINED_THEMES.light.bgColor  // 背景色
+  @State private textColor: ResourceColor = PREDEFINED_THEMES.light.textColor // 文字色
+
+  // --- 阅读设置 ---
+  private readingSettings: ReadingSettings = {
+    fontSize: 16,
+    lineHeight: 24,
+    wordSpacing: 4,
+    isNightMode: false
+  }
 
   // --- 主题配置 ---
   @Builder nightModeBuilder() {
@@ -132,9 +143,9 @@ struct Reader {
       .onClick(() => {
         // TODO: 实现收藏功能
         this.showMenu = false
-        AlertDialog.show({
-          title: '提示',
-          message: '已添加到书架'
+        promptAction.showToast({
+          message: '已添加到书架',
+          duration: 2000
         })
       })
 

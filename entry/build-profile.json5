@@ -15,7 +15,8 @@
   ],
   "targets": [
     {
-      "name": "default"
+      "name": "default",
+      "runtimeOS": "HarmonyOS"
     }
   ]
 }

@@ -1,19 +1,20 @@
-import router from '@ohos.router'
-import promptAction from '@ohos.promptAction'
+import { router, promptAction } from '@kit.ArkUI'
+import { AppSettings, DEFAULT_APP_SETTINGS, PREDEFINED_THEMES } from '../common/Types'
 
 /**
  * 设置页面
  * 负责用户偏好设置管理
+ * API 20 版本
  */
 @Entry
 @Component
 struct Settings {
   // --- 用户设置状态 ---
-  @State private themeMode: string = 'light'      // 主题模式：light/dark
-  @State private defaultFontSize: number = 16     // 默认字体大小
-  @State private nightMode: boolean = false       // 夜间模式开关
-  @State private soundEnabled: boolean = true     // 音效开关
-  @State private autoSleepMinutes: number = 30    // 自动休眠时间（分钟）
+  @State private themeMode: 'light' | 'dark' = DEFAULT_APP_SETTINGS.themeMode  // 主题模式
+  @State private defaultFontSize: number = DEFAULT_APP_SETTINGS.defaultFontSize // 默认字体大小
+  @State private nightMode: boolean = DEFAULT_APP_SETTINGS.nightMode           // 夜间模式开关
+  @State private soundEnabled: boolean = DEFAULT_APP_SETTINGS.soundEnabled     // 音效开关
+  @State private autoSleepMinutes: number = DEFAULT_APP_SETTINGS.autoSleepMinutes // 自动休眠时间（分钟）
 
   // --- 主题设置区域 ---
   @Builder themeSettings() {
@@ -29,11 +30,11 @@ struct Settings {
       this.nightModeBuilder()
 
       // 主题模式切换按钮
-      Button(this.themeMode === 'light' ? '亮色模式' : '深色模式')
+      Button(this.themeMode === 'light' ? PREDEFINED_THEMES.light.name + '模式' : PREDEFINED_THEMES.dark.name + '模式')
         .type(ButtonType.Normal)
         .width('90%')
-        .backgroundColor(this.themeMode === 'light' ? '#e0e0e0' : '#333333')
-        .fontColor(this.themeMode === 'light' ? '#333333' : '#FFFFFF')
+        .backgroundColor(this.themeMode === 'light' ? PREDEFINED_THEMES.light.bgColor : PREDEFINED_THEMES.dark.bgColor)
+        .fontColor(this.themeMode === 'light' ? PREDEFINED_THEMES.light.textColor : PREDEFINED_THEMES.dark.textColor)
         .padding(8)
         .margin({ top: 8 })
         .onClick(() => {

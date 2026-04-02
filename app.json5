@@ -6,8 +6,8 @@
     "versionName": "1.0.0",
     "label": "$string:app_name",
     "description": "鸿蒙读书 APP",
-    "minAPIVersion": 9,
-    "targetAPIVersion": 12,
+    "minAPIVersion": 12,
+    "targetAPIVersion": 20,
     "apiReleaseType": "Release"
   }
 }

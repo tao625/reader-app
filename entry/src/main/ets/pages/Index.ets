@@ -1,15 +1,6 @@
 import bookList from '../../rawfile/bookList.json'
-import router from '@ohos.router'
-
-// 书本信息类型定义
-interface BookInfo {
-  id: number
-  title: string
-  author: string
-  cover: string
-  category: string
-  progress: number
-}
+import { router } from '@kit.ArkUI'
+import { BookInfo } from '../common/Types'
 
 // 页面状态
 @Entry
